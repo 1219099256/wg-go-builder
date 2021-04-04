@@ -1,8 +1,8 @@
-name: Docker Image CI
+name: Build
 
 on:
-  schedule:
-    - cron: '0 */24 * * *'
+  workflow_dispatch:
+  push:
 
 jobs:
 
@@ -13,15 +13,22 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Prepare workspace
-      run: mkdir workspace
+
+    - name: Set up Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.16
+
     - name: Build the WireGuard binary (wireguard-go)
       run: |
-        cat build-wg-go.sh | docker run --rm -i -v="$PWD/workspace:/workspace" -w="/workspace" golang:latest sh
-        ls ./workspace/wireguard-go
+        git clone https://git.zx2c4.com/wireguard-go
+        cd wireguard-go
+        CGO_ENABLE=0 GOOS=linux GOARCH=arm64 go build -v -o "wireguard-go"
+
     - name: Get version
       id: getver
-      run: echo "::set-output name=body::`./workspace/wireguard-go --version | head -n 1 | cut -d ' ' -f 2`"
+      run: echo "::set-output name=body::`wireguard-go/wireguard-go --version | head -n 1 | cut -d ' ' -f 2`"
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -33,13 +40,14 @@ jobs:
         body: Binary build for Linux system with amd64 architecture.
         draft: false
         prerelease: false
+
     - name: Upload Release Asset
-      id: upload-release-asset 
+      id: upload-release-asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./workspace/wireguard-go
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: wireguard-go/wireguard-go
         asset_name: wireguard-go
         asset_content_type: application/octet-stream
