@@ -23,7 +23,7 @@ jobs:
       run: |
         git clone https://git.zx2c4.com/wireguard-go
         cd wireguard-go
-        CGO_ENABLE=0 GOOS=linux GOARCH=arm64 go build -v -o "wireguard-go"
+        CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build -v -o "wireguard-go"
 
     - name: Get version
       id: getver
