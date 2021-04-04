@@ -27,7 +27,7 @@ jobs:
 
     - name: Get version
       id: getver
-      run: echo "::set-output name=body::`wireguard-go/wireguard-go --version | head -n 1 | cut -d ' ' -f 2`"
+      run: echo "::set-output name=body::`./wireguard-go/wireguard-go --version | head -n 1 | cut -d ' ' -f 2`"
 
     - name: Create Release
       id: create_release
