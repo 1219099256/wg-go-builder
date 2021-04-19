@@ -2,7 +2,7 @@ name: Build
 
 on:
   workflow_dispatch:
-  #push:
+  push:
 
 jobs:
 
@@ -21,7 +21,8 @@ jobs:
 
     - name: Build the WireGuard binary (wireguard-go)
       run: |
-        git clone https://git.zx2c4.com/wireguard-go
+        wget https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-0.0.20201118.zip
+        unzip wireguard-go-0.0.20201118.zip
         cd wireguard-go
         CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build -v -o "wireguard-go"
 
