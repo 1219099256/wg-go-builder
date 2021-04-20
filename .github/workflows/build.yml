@@ -26,7 +26,7 @@ jobs:
         rm *.zip
         mv wireguard* wireguard-go
         cd wireguard-go
-        CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build -v -o "wireguard-go"
+        GOOS=linux GOARCH=amd64 go build -v -o "wireguard-go"
 
     - name: Get version
       id: getver
