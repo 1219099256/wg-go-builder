@@ -21,10 +21,10 @@ jobs:
 
     - name: Build the WireGuard binary (wireguard-go)
       run: |
-        wget https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-0.0.20201118.zip -O wireguard-go.zip
-        unzip wireguard-go.zip
-        rm *.zip
-        mv wireguard* wireguard-go
+        git https://git.zx2c4.com/wireguard-go
+        #unzip wireguard-go.zip
+        #rm *.zip
+        #mv wireguard* wireguard-go
         cd wireguard-go
         GOOS=linux GOARCH=amd64 go build -v -o "wireguard-go"
 
