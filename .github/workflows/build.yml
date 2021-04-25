@@ -21,7 +21,7 @@ jobs:
 
     - name: Build the WireGuard binary (wireguard-go)
       run: |
-        git https://git.zx2c4.com/wireguard-go
+        git clone https://git.zx2c4.com/wireguard-go
         #unzip wireguard-go.zip
         #rm *.zip
         #mv wireguard* wireguard-go
