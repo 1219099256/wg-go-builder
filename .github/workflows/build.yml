@@ -17,7 +17,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v1
       with:
-        go-version: 1.16
+        go-version: 1.17
 
     - name: Build the WireGuard binary (wireguard-go)
       run: |
@@ -26,7 +26,8 @@ jobs:
         #rm *.zip
         #mv wireguard* wireguard-go
         cd wireguard-go
-        GOOS=linux GOARCH=amd64 go build -v -o "wireguard-go"
+        #GOOS=linux GOARCH=amd64 go build -v -o "wireguard-go"
+        make
 
     - name: Get version
       id: getver
